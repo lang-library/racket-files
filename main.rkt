@@ -23,10 +23,10 @@
     )
   )
 
-(define (files-read-all-bytes path)
+(define (files-read-all-bytes path #:buffer-size [buffer-size 4096])
   (call-with-input-file path
     (lambda (input-port)
-      (define buffer (make-bytes 4096))
+      (define buffer (make-bytes buffer-size))
       (define result #"")
       (define bytes-read #f)
       (until (eof-object? bytes-read)
@@ -40,8 +40,8 @@
     )
   )
 
-(define (files-read-all-text-utf8 path)
-  (define bytes (files-read-all-bytes path))
+(define (files-read-all-text-utf8 path #:buffer-size [buffer-size 4096])
+  (define bytes (files-read-all-bytes path  #:buffer-size buffer-size))
   (bytes->string/utf-8 bytes)
   )
 
