@@ -1,27 +1,10 @@
 #lang racket
-(require compatibility/defmacro) ;; compatibility-lib
-(require dyoo-while-loop) ;; while-loop
+;;(require compatibility/defmacro) ;; compatibility-lib
+(require while-until) ;; while-until
 
-(define-macro (until cond . rest)
-  `(while (not ,cond) ,@rest)
-  )
-
-#;(define (files-read-all-bytes path)
-  (call-with-input-file path
-    (lambda (input-port)
-      (define buffer (make-bytes 4096))
-      (define result #"")
-      (let loop ()
-        (define bytes-read (read-bytes-avail! buffer input-port))
-        (unless (eof-object? bytes-read)
-          (set! result (bytes-append result (subbytes buffer 0 bytes-read)))
-          (loop)
-          )
-        )
-      result
-      )
-    )
-  )
+;; (define-macro (until cond . rest)
+;;   `(while (not ,cond) ,@rest)
+;;   )
 
 (define (files-read-all-bytes path #:buffer-size [buffer-size 4096])
   (call-with-input-file path
