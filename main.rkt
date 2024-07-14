@@ -1,12 +1,9 @@
 #lang racket
 ;;(require compatibility/defmacro) ;; compatibility-lib
 (require while-until) ;; while-until
+(require json)
 
-;; (define-macro (until cond . rest)
-;;   `(while (not ,cond) ,@rest)
-;;   )
-
-(define (files-read-all-bytes path #:buffer-size [buffer-size 4096])
+(define (files-read-bytes path #:buffer-size [buffer-size 4096])
   (call-with-input-file path
     (lambda (input-port)
       (define buffer (make-bytes buffer-size))
@@ -23,9 +20,69 @@
     )
   )
 
-(define (files-read-all-text-utf8 path #:buffer-size [buffer-size 4096])
-  (define bytes (files-read-all-bytes path  #:buffer-size buffer-size))
+(define (files-write-bytes path x)
+  (call-with-output-file path
+    (lambda (output-port)
+      (write-bytes x output-port)
+      )
+    #:exists 'truncate/replace
+    )
+  (void)
+  )
+
+(define (files-read-text path #:buffer-size [buffer-size 4096])
+  (define bytes (files-read-bytes path  #:buffer-size buffer-size))
   (bytes->string/utf-8 bytes)
   )
 
-(provide files-read-all-bytes files-read-all-text-utf8)
+(define (files-write-text path s)
+  (define bytes (string->bytes/utf-8 s))
+  (files-write-bytes path bytes)
+  )
+
+(define (files-read-sexp path)
+  (call-with-input-file path
+    (lambda (input-port)
+      (define result (read input-port))
+      result
+      )
+    )
+  )
+
+(define (files-write-sexp path x)
+  (call-with-output-file path
+    (lambda (output-port)
+      (write x output-port)
+      )
+    #:exists 'truncate/replace
+    )
+  (void)
+  )
+
+
+(define (to-json x) (jsexpr->string x))
+
+(define (from-json json) (string->jsexpr json))
+
+(define (files-read-json path)
+  (define json (files-read-text path))
+  (from-json json)
+  )
+
+(define (files-write-json path x)
+  (define json (to-json x))
+  (files-write-text path json)
+  )
+
+(provide
+ files-read-bytes
+ files-write-bytes
+ files-read-text
+ files-write-text
+ files-read-sexp
+ files-write-sexp
+ to-json
+ from-json
+ files-read-json
+ files-write-json
+ )
