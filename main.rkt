@@ -2,6 +2,7 @@
 ;;(require compatibility/defmacro) ;; compatibility-lib
 (require while-until) ;; while-until
 (require json)
+(require base64)
 
 (define (files-read-bytes path #:buffer-size [buffer-size 4096])
   (call-with-input-file path
@@ -74,6 +75,14 @@
   (files-write-text path json)
   )
 
+(define (to-base64 x)
+  (bytes->string/latin-1 (base64-encode x))
+  )
+
+(define (from-base64 x)
+  (base64-decode x)
+  )
+
 (provide
  files-read-bytes
  files-write-bytes
@@ -85,4 +94,6 @@
  from-json
  files-read-json
  files-write-json
+ to-base64
+ from-base64
  )

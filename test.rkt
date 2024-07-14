@@ -20,3 +20,6 @@
 
 (define hash (files-read-json "./data3.json"))
 (dump (hash-ref hash '|hello world|))
+
+(to-base64 #"apple")
+(to-json (to-base64 #"apple"))
