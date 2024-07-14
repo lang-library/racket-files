@@ -19,4 +19,9 @@
     )
   )
 
-(provide files-read-all-bytes)
+(define (files-read-all-text-utf8 path)
+  (define bytes (files-read-all-bytes path))
+  (bytes->string/utf-8 bytes)
+  )
+
+(provide files-read-all-bytes files-read-all-text-utf8)

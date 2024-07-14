@@ -1,3 +1,3 @@
 #lang racket
-(define xyz.dll "abc")
+(define xyz.dll "abcハロー©")
 (provide xyz.dll)
