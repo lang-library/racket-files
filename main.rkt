@@ -61,7 +61,7 @@
   )
 
 
-(define (to-json x) (jsexpr->string x))
+(define (to-json x #:indent? [indent? #f]) (jsexpr->string x #:indent (if indent? 2 #f)))
 
 (define (from-json json) (string->jsexpr json))
 
@@ -71,7 +71,7 @@
   )
 
 (define (files-write-json path x)
-  (define json (to-json x))
+  (define json (to-json x #:indent? #t))
   (files-write-text path json)
   )
 
