@@ -73,6 +73,14 @@
     ((bytes? x) (to-meta-pair "bytes" (to-base64 x)))
     ((cons? x)
      (cons (to-meta-object (car x)) (to-meta-object (cdr x))))
+    ((hash? x)
+     (hash-map/copy
+      x
+      (lambda (k v)
+        (values k (to-meta-object v))
+        )))
+    ((vector? x)
+     (vector->list (vector-map to-meta-object x)))
     (#t (to-meta-pair "error" (print->string x)))
     )
   )

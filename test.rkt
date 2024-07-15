@@ -27,3 +27,7 @@
 (to-meta-object #"apple")
 (dump (to-json (to-meta-object #"apple")))
 (dump (to-json (to-meta-object '(11 22 #"apple"))))
+(dump (to-json (to-meta-object '#(11 22 #"apple"))))
+(dump (to-json (to-meta-object '#hasheq((! . "bytes") (? . "YXBwbGU")))))
+(dump (to-json (to-meta-object '#hasheqv((! . "bytes") (? . "YXBwbGU")))))
+(dump (to-json (to-meta-object '#hash((! . "bytes") (? . "YXBwbGU")))))
