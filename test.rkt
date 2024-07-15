@@ -23,3 +23,7 @@
 
 (to-base64 #"apple")
 (to-json (to-base64 #"apple"))
+
+(to-meta-object #"apple")
+(dump (to-json (to-meta-object #"apple")))
+(dump (to-json (to-meta-object '(11 22 #"apple"))))

@@ -3,6 +3,7 @@
 (require while-until) ;; while-until
 (require json)
 (require base64)
+(require pprint-all)
 
 (define (files-read-bytes path #:buffer-size [buffer-size 4096])
   (call-with-input-file path
@@ -60,6 +61,21 @@
   (void)
   )
 
+(define (to-meta-pair name data)
+  (hasheq '! name '? data)
+  )
+
+(define (to-meta-object x)
+  (cond
+    ((null? x) x)
+    ((number? x) x)
+    ((string? x) x)
+    ((bytes? x) (to-meta-pair "bytes" (to-base64 x)))
+    ((cons? x)
+     (cons (to-meta-object (car x)) (to-meta-object (cdr x))))
+    (#t (to-meta-pair "error" (print->string x)))
+    )
+  )
 
 (define (to-json x #:indent? [indent? #f]) (jsexpr->string x #:indent (if indent? 2 #f)))
 
@@ -90,6 +106,7 @@
  files-write-text
  files-read-sexp
  files-write-sexp
+ to-meta-object
  to-json
  from-json
  files-read-json
