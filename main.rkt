@@ -65,6 +65,21 @@
   (hasheq '! name '? data)
   )
 
+(define (from-meta-pair ht)
+  (with-handlers ([exn:fail?
+                   ht])
+    (let ([key (hash-ref ht '!)])
+      (cond
+        ((equal? key "bytes") (from-base64 (hash-ref ht '?)))
+        ((equal? key "racket")
+         (define sp (open-input-string (hash-ref ht '?)))
+         (read sp))
+        (#t ht)
+        )
+      )
+    )
+  )
+
 (define (to-meta-object x)
   (define mo
     (cond
@@ -85,6 +100,29 @@
       )
     )
   (if (jsexpr? mo) mo (to-meta-pair "racket" (print->string mo)))
+  )
+
+(define (from-meta-object mo)
+  (define x
+    (cond
+      ;;((null? x) x)
+      ;;((number? x) x)
+      ;;((string? x) x)
+      ;;((bytes? x) (to-meta-pair "bytes" (to-base64 x)))
+      ((cons? mo) (cons (from-meta-object (car mo)) (from-meta-object (cdr mo))))
+      ((hash? mo)
+       (if (hash-has-key? mo '!)
+           (from-meta-pair mo)
+           (hash-map/copy
+            mo
+            (lambda (k v)
+              (values k (from-meta-object v))
+              ))))
+      ((vector? mo) (vector-map from-meta-object mo))
+      (#t mo)
+      )
+    )
+  x
   )
 
 (define (to-json x #:indent? [indent? #f])
@@ -120,6 +158,7 @@
  files-read-sexp
  files-write-sexp
  to-meta-object
+ from-meta-object
  to-json
  from-json
  files-read-json

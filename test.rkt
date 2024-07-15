@@ -32,3 +32,11 @@
 (dump (to-json '#hasheqv((! . "bytes") (? . "YXBwbGU"))))
 (dump (to-json '#hash((! . "bytes") (? . "YXBwbGU"))))
 (dump (to-json '#hash(((a b c) . "bytes") (? . "YXBwbGU"))))
+
+(dump (from-meta-object (to-meta-object #"apple")))
+(dump (from-meta-object (to-meta-object '(11 22 #"apple"))))
+(dump (from-meta-object (to-meta-object '#(11 22 #"apple"))))
+(dump (from-meta-object (to-meta-object '#hasheq((! . "bytes") (? . "YXBwbGU")))))
+(dump (from-meta-object (to-meta-object '#hasheqv((! . "bytes") (? . "YXBwbGU")))))
+(dump (from-meta-object (to-meta-object '#hash((! . "bytes") (? . "YXBwbGU")))))
+(dump (from-meta-object (to-meta-object '#hash(((a b c) . "bytes") (? . "YXBwbGU")))))
