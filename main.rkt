@@ -66,26 +66,31 @@
   )
 
 (define (to-meta-object x)
-  (cond
-    ((null? x) x)
-    ((number? x) x)
-    ((string? x) x)
-    ((bytes? x) (to-meta-pair "bytes" (to-base64 x)))
-    ((cons? x)
-     (cons (to-meta-object (car x)) (to-meta-object (cdr x))))
-    ((hash? x)
-     (hash-map/copy
-      x
-      (lambda (k v)
-        (values k (to-meta-object v))
-        )))
-    ((vector? x)
-     (vector->list (vector-map to-meta-object x)))
-    (#t (to-meta-pair "error" (print->string x)))
+  (define mo
+    (cond
+      ;;((null? x) x)
+      ;;((number? x) x)
+      ;;((string? x) x)
+      ((bytes? x) (to-meta-pair "bytes" (to-base64 x)))
+      ((cons? x) (cons (to-meta-object (car x)) (to-meta-object (cdr x))))
+      ((hash? x)
+       (hash-map/copy
+        x
+        (lambda (k v)
+          (values k (to-meta-object v))
+          )))
+      ((vector? x) (vector->list (vector-map to-meta-object x)))
+      ;;((vector? x) (vector-map to-meta-object x))
+      (#t x)
+      )
     )
+  (if (jsexpr? mo) mo (to-meta-pair "racket" (print->string mo)))
   )
 
-(define (to-json x #:indent? [indent? #f]) (jsexpr->string x #:indent (if indent? 2 #f)))
+(define (to-json x #:indent? [indent? #f])
+  (define mo (to-meta-object x))
+  (jsexpr->string mo #:indent (if indent? 2 #f))
+  )
 
 (define (from-json json) (string->jsexpr json))
 
