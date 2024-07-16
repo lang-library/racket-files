@@ -4,6 +4,8 @@
 (require json)
 (require base64)
 (require pprint-all)
+(require misc)
+(require meta-json)
 
 (define (files-read-bytes path #:buffer-size [buffer-size 4096])
   (call-with-input-file path
@@ -61,11 +63,11 @@
   (void)
   )
 
-(define (to-meta-pair name data)
+#;(define (to-meta-pair name data)
   (hasheq '! name '? data)
   )
 
-(define (from-meta-pair ht)
+#;(define (from-meta-pair ht)
   (with-handlers ([exn:fail?
                    ht])
     (let ([key (hash-ref ht '!)])
@@ -80,7 +82,7 @@
     )
   )
 
-(define (to-meta-object x)
+#;(define (to-meta-object x)
   (define mo
     (cond
       ;;((null? x) x)
@@ -102,7 +104,7 @@
   (if (jsexpr? mo) mo (to-meta-pair "racket" (print->string mo)))
   )
 
-(define (from-meta-object mo)
+#;(define (from-meta-object mo)
   (define x
     (cond
       ;;((null? x) x)
@@ -125,12 +127,12 @@
   x
   )
 
-(define (to-json x #:indent? [indent? #f])
+#;(define (to-json x #:indent? [indent? #f])
   (define mo (to-meta-object x))
   (jsexpr->string mo #:indent (if indent? 2 #f))
   )
 
-(define (from-json json) (string->jsexpr json))
+#;(define (from-json json) (string->jsexpr json))
 
 (define (files-read-json path)
   (define json (files-read-text path))
@@ -142,11 +144,11 @@
   (files-write-text path json)
   )
 
-(define (to-base64 x)
+#;(define (to-base64 x)
   (bytes->string/latin-1 (base64-encode x))
   )
 
-(define (from-base64 x)
+#;(define (from-base64 x)
   (base64-decode x)
   )
 
@@ -157,12 +159,8 @@
  files-write-text
  files-read-sexp
  files-write-sexp
- to-meta-object
- from-meta-object
  to-json
  from-json
  files-read-json
  files-write-json
- to-base64
- from-base64
  )

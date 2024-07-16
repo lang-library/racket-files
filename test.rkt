@@ -2,6 +2,8 @@
 (require "./main.rkt")
 (require "./data1.rkt")
 (require pprint-all)
+(require misc)
+(require access)
 
 (dump xyz.dll)
 
@@ -21,22 +23,13 @@
 (define hash (files-read-json "./data3.json"))
 (dump (hash-ref hash '|hello world|))
 
-(to-base64 #"apple")
-(to-json (to-base64 #"apple"))
+(dump (win-userprofile))
 
-(to-meta-object #"apple")
-(dump (to-json #"apple"))
-(dump (to-json '(11 22 #"apple")))
-(dump (to-json '#(11 22 #"apple")))
-(dump (to-json '#hasheq((! . "bytes") (? . "YXBwbGU"))))
-(dump (to-json '#hasheqv((! . "bytes") (? . "YXBwbGU"))))
-(dump (to-json '#hash((! . "bytes") (? . "YXBwbGU"))))
-(dump (to-json '#hash(((a b c) . "bytes") (? . "YXBwbGU"))))
+(! (win-userprofile)
+   (string->path !)
+   )
 
-(dump (from-meta-object (to-meta-object #"apple")))
-(dump (from-meta-object (to-meta-object '(11 22 #"apple"))))
-(dump (from-meta-object (to-meta-object '#(11 22 #"apple"))))
-(dump (from-meta-object (to-meta-object '#hasheq((! . "bytes") (? . "YXBwbGU")))))
-(dump (from-meta-object (to-meta-object '#hasheqv((! . "bytes") (? . "YXBwbGU")))))
-(dump (from-meta-object (to-meta-object '#hash((! . "bytes") (? . "YXBwbGU")))))
-(dump (from-meta-object (to-meta-object '#hash(((a b c) . "bytes") (? . "YXBwbGU")))))
+(! (win-userprofile)
+   (build-path ! "abc")
+   )
+   
