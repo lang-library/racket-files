@@ -16,3 +16,4 @@ git tag -a "$tag" -m"$tag"
 git push origin "$tag"
 git push
 git remote -v
+git log | head -n 1
