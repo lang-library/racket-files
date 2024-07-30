@@ -1,7 +1,7 @@
 #lang racket
 (require "./main.rkt")
 (require "./data1.rkt")
-(require pprint-all)
+(require output)
 (require misc)
 (require access)
 
