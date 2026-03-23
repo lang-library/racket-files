@@ -1,9 +1,19 @@
+#! /usr/bin/env -S bash racket-run
 #lang racket
 (require "./main.rkt")
 (require "./data1.rkt")
 (require output)
 (require misc)
 (require access)
+
+#|
+  +pkg output
+  +pkg misc
+  +pkg access
+  +pkg while-until
+  +pkg base64
+  +pkg meta-json
+|#
 
 (dump xyz.dll)
 
@@ -32,4 +42,3 @@
 (! (win-userprofile)
    (build-path ! "abc")
    )
-   
